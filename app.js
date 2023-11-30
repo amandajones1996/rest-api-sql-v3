@@ -17,8 +17,10 @@ app.use(express.json());
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
+// setting up route to routes
 app.use('/api', routes);
 
+// ensuring database connection
 (async () => {
   try {
     await sequelize.authenticate();

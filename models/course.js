@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'A title is required'
+                    msg: 'A title is required. Please enter a title for this course'
                 },
                 notEmpty: {
                     msg: 'A title must be entered'
@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'A description is required'
+                    msg: 'A description is required. Please enter a description for this course'
                 },
                 notEmpty: {
                     msg: 'A description must be entered'

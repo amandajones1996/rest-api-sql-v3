@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { User, Course } = require('./models'); 
 const authUser = require('./middleware/authUser'); 
 
+// Error Handler
 function asyncHandler(cb) {
   return async (req, res, next) => {
     try {
@@ -13,12 +14,15 @@ function asyncHandler(cb) {
     }
   };
 }
-// user routes
+
+// User Routes
+// Get All Users
 router.get('/users', authUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
   res.status(200).json(user);
 }));
 
+// Create New User
 router.post('/users', asyncHandler(async (req, res) => {
   try {
     let user = req.body
@@ -38,17 +42,19 @@ router.post('/users', asyncHandler(async (req, res) => {
 }));
 
 // Course Routes
+// Get All Courses
 router.get('/courses', asyncHandler(async (req, res) => {
   const courses = await Course.findAll({
     include: [{ model: User, as: 'user', attributes: ['firstName', 'lastName', 'emailAddress']}]
   });
   if(!courses){
-    res.status(404).json({message: 'No courses found'});
+    res.status(404).json({message: "The course was not found"});
   } else {
   res.status(200).json(courses);
   }
 }));
 
+// Get Course By ID
 router.get('/courses/:id', asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id, {
     include: [{ model: User, as: 'user', attributes: ['firstName', 'lastName', 'emailAddress'] }]
@@ -60,6 +66,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
   }
 }));
 
+// Create New Course
 router.post('/courses', authUser, asyncHandler(async (req, res) => {
   try {
     const course = await Course.create(req.body);
@@ -73,6 +80,7 @@ router.post('/courses', authUser, asyncHandler(async (req, res) => {
   }
 }));
 
+// Update Course By ID
 router.put('/courses/:id', authUser, asyncHandler(async (req, res) => {
     const course = await Course.findByPk(req.params.id);
     if (!course) {
@@ -86,6 +94,7 @@ router.put('/courses/:id', authUser, asyncHandler(async (req, res) => {
     res.status(204).end();
 }));
 
+// Delete Course By ID
 router.delete('/courses/:id', authUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id);
   if (!course) {
